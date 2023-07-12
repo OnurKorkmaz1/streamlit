@@ -1,39 +1,79 @@
 import streamlit as st
 import plotly.graph_objects as go
 
+# Streamlit uygulama başlatma
+st.title("Revit Model Health Check")
+#st.markdown("Bu örnekte Revit modelinin sağlık kontrolü sonuçlarını Gauge (ölçek) grafiği kullanarak gösteriyoruz.")
+
+# Create Radio Buttons
+options = st.radio(label = 'NAMING CONTROL', options = ['Family Name','Material Name'])
+st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
 def gauge_chart(value, title):
+    if value <= 30:
+        color = "red"
+    elif value <= 70:
+        color = "yellow"
+    else:
+        color = "green"
+
     fig = go.Figure(go.Indicator(
-        mode = "gauge+number",
-        value = value,
-        title = {'text': title},
-        gauge = {
-            'axis': {'range': [None, 100]},
-            'bar': {'color': "blue"},
+        mode="gauge+number",
+        value=value,
+        title={'text': title},
+        gauge={
+            'axis': {'range': [0, 100]},
+            'bar': {'color': color},
             'bgcolor': "white",
-            'borderwidth': 3,
-            'bordercolor': "black",
+            'borderwidth': 2,
+            'bordercolor': "gray",
             'steps': [
-                {'range': [0, 40], 'color': 'white'},
-                {'range': [40, 60], 'color': 'white'},
-                {'range': [60, 100], 'color': 'white'}
+                {'range': [0, 30], 'color': 'white'},
+                {'range': [30, 70], 'color': 'white'},
+                {'range': [70, 100], 'color': 'white'}
             ],
             'threshold': {
-                'line': {'color': "red", 'width': 3},
+                'line': {'color': "black", 'width': 4},
                 'thickness': 0.75,
-                'value': 50
+                'value': 80
             }
         }
     ))
 
     return fig
 
-# Streamlit uygulama başlatma
-st.title("General Model Control")
-
-
 # Rastgele bir değer oluşturma
-value = 50
+P_familyname = 65
+P_materialname = 50
 
 # Gauge grafiğini oluşturma ve gösterme
-fig = gauge_chart(value, "QUALITY")
-st.plotly_chart(fig)
+#fig = gauge_chart(revit_puan, "Revit Model Puanı")
+#st.plotly_chart(fig)
+
+def familyname(dataframe):
+
+    st.markdown(""" <style> .font {
+        font-size:50px ; font-family: 'Cooper Black'; color: #FF9633;} 
+        </style> """, unsafe_allow_html=True)
+
+    st.markdown('<p class="font">Family Name</p>', unsafe_allow_html=True)
+
+    # Add css to make text bigger
+    fig = gauge_chart(P_familyname, "Revit Model Puanı")
+    st.plotly_chart(fig)
+
+def materialname(dataframe):
+
+    st.markdown(""" <style> .font {
+    font-size:50px ; font-family: 'Cooper Black'; color: #FF9633;} 
+    </style> """, unsafe_allow_html=True)
+
+    st.markdown('<p class="font">Material Name</p>', unsafe_allow_html=True)
+
+    fig = gauge_chart(P_materialname, "Revit Model Puanı")
+    st.plotly_chart(fig)
+
+if options == "Family Name":
+    familyname(P_familyname)
+elif options == "Material Name":
+    materialname(P_materialname)
