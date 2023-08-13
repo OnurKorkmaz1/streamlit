@@ -1,5 +1,13 @@
 import streamlit as st
 import plotly.graph_objects as go
+import plotly.express as px
+import pandas as pd
+
+from Homepage import df
+
+#data = pd.read_csv("grades_2.csv")
+
+
 
 # Streamlit uygulama başlatma
 st.title("Revit Model Health Check")
@@ -51,12 +59,25 @@ P_materialname = 50
 #st.plotly_chart(fig)
 
 def familyname(dataframe):
-    st.header("Family Name")
+
+    st.markdown(""" <style> .font {
+        font-size:50px ; font-family: 'Cooper Black'; color: #FF9633;} 
+        </style> """, unsafe_allow_html=True)
+
+    st.markdown('<p class="font">Family Name</p>', unsafe_allow_html=True)
+
+    # Add css to make text bigger
     fig = gauge_chart(P_familyname, "Revit Model Puanı")
     st.plotly_chart(fig)
 
 def materialname(dataframe):
-    st.header("Family Name")
+
+    st.markdown(""" <style> .font {
+    font-size:50px ; font-family: 'Cooper Black'; color: #FF9633;} 
+    </style> """, unsafe_allow_html=True)
+
+    st.markdown('<p class="font">Material Name</p>', unsafe_allow_html=True)
+
     fig = gauge_chart(P_materialname, "Revit Model Puanı")
     st.plotly_chart(fig)
 
@@ -64,7 +85,6 @@ if options == "Family Name":
     familyname(P_familyname)
 elif options == "Material Name":
     materialname(P_materialname)
-
 
 
 
